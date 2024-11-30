@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 app = Flask(__name__)
 app.secret_key = '1234'  
 
-# Configuración de Flask-Login
+#Configuración de Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -95,8 +95,8 @@ def report():
                     valores, 
                     labels=etiquetas, 
                     autopct='%1.1f%%', 
-                    startangle=90,  # Inicia desde un ángulo para mejorar la distribución
-                    labeldistance=1.1  # Aumenta la distancia de las etiquetas
+                    startangle=90,  #Inicia desde un ángulo para mejorar la distribución
+                    labeldistance=1.1  #Aumenta la distancia de las etiquetas
                 )
                 plt.title(f'Gráfico de Pastel: {columna}')
             else:
