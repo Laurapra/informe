@@ -3,17 +3,16 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 import pandas as pd
 import requests
 import matplotlib.pyplot as plt
-import numpy as np
 
 app = Flask(__name__)
-app.secret_key = '1234'  # Cambia esto por una clave secreta más segura en producción
+app.secret_key = '1234'  
 
 # Configuración de Flask-Login
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 #Simulación de una base de datos de usuarios
-users = {'usuario1': {'password': '1234'}} 
+users = {'usuario1': {'password': '1234'}}
 
 class User(UserMixin):
     def __init__(self, username):
@@ -39,12 +38,12 @@ def login():
 @app.route('/report', methods=['GET', 'POST'])
 @login_required
 def report():
-    # Obtener datos de la API
+    #Obtener datos de la API
     response = requests.get("https://www.datos.gov.co/resource/mntw-htj4.json?municipio=SOGAMOSO")
     data = response.json()
     df = pd.DataFrame(data)
 
-    # Obtener las columnas disponibles para graficar
+    #Obtener las columnas disponibles para graficar
     columnas_disponibles = df.columns.tolist()
 
     if request.method == 'POST':
@@ -52,24 +51,55 @@ def report():
         tipo_grafico = request.form['tipo_grafico']
         nombres_columnas_validas = request.form.getlist('nombre_columnas')
 
-        # Crear un gráfico con todas las columnas seleccionadas
+        #Validar si se seleccionaron columnas
+        if not nombres_columnas_validas:
+            return "Error: No se seleccionaron columnas para graficar.", 400
+
+        # Crear el gráfico según el tipo seleccionado
         plt.figure(figsize=(10, 6))
 
-        for nombre_columna_valida in nombres_columnas_validas:
-            if nombre_columna_valida in df.columns:
-                plt.plot(df.index, df[nombre_columna_valida], label=nombre_columna_valida)
+        if tipo_grafico == 'lineas':
+            for nombre_columna in nombres_columnas_validas:
+                if nombre_columna in df.columns:
+                    plt.plot(df.index, pd.to_numeric(df[nombre_columna], errors='coerce'), label=nombre_columna)
+                else:
+                    return f"Error: La columna {nombre_columna} no existe en los datos.", 400
+
+            plt.title('Gráfico de Líneas')
+            plt.xlabel('Índice')
+            plt.ylabel('Valores')
+            plt.legend()
+
+        elif tipo_grafico == 'barras':
+            for nombre_columna in nombres_columnas_validas:
+                if nombre_columna in df.columns:
+                    plt.bar(df.index, pd.to_numeric(df[nombre_columna], errors='coerce'), label=nombre_columna)
+                else:
+                    return f"Error: La columna {nombre_columna} no existe en los datos.", 400
+
+            plt.title('Gráfico de Barras')
+            plt.xlabel('Índice')
+            plt.ylabel('Valores')
+            plt.legend()
+
+        elif tipo_grafico == 'pie':
+            if len(nombres_columnas_validas) != 1:
+                return "Error: El gráfico de pastel solo permite seleccionar una columna.", 400
+
+            columna = nombres_columnas_validas[0]
+            if columna in df.columns:
+                valores = pd.to_numeric(df[columna], errors='coerce').dropna()
+                etiquetas = valores.index
+                plt.pie(valores, labels=etiquetas, autopct='%1.1f%%')
+                plt.title(f'Gráfico de Pastel: {columna}')
             else:
-                return "Error: La columna seleccionada no existe en los datos."
+                return f"Error: La columna {columna} no existe en los datos.", 400
 
-        plt.title('Gráfico de Múltiples Columnas')
-        plt.xlabel('Índice')
-        plt.ylabel('Valores')
-        plt.legend()
+        else:
+            return "Error: Tipo de gráfico no soportado.", 400
 
-        # Guardar el gráfico en formato PNG
+        #Guardar el gráfico en formato PNG y PDF
         plt.savefig('static/grafico.png')
-        
-        # Guardar el gráfico en formato PDF
         plt.savefig('static/grafico.pdf', format='pdf')
         plt.close()
 
