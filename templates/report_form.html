@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Seleccionar Tipo de Informe</title>
+</head>
+<body>
+    <header>
+        <h1>Seleccionar Tipo de Informe</h1>
+        <p>Usuario: {{ current_user.id }}</p>
+    </header>
+    
+    <form method="POST" action="{{ url_for('report') }}">
+        <label for="tipo_grafico">Selecciona el tipo de gráfico:</label>
+        <select name="tipo_grafico" id="tipo_grafico">
+            <option value="bar">Gráfico de Barras</option>
+            <option value="pie">Gráfico de Pastel</option>
+        </select>
+        <button type="submit">Generar Informe</button>
+    </form>
+
+    <footer>
+        <a href="{{ url_for('logout') }}" class="button">Cerrar Sesión</a>
+    </footer>
+</body>
+</html>
