@@ -3,26 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>Seleccionar Tipo de Informe</title>
+    <title>Generar Reporte</title>
 </head>
 <body>
-    <header>
-        <h1>Seleccionar Tipo de Informe</h1>
-        <p>Usuario: {{ current_user.id }}</p>
-    </header>
-    
-    <form method="POST" action="{{ url_for('report') }}">
-        <label for="tipo_grafico">Selecciona el tipo de gráfico:</label>
+    <h2>Selecciona las columnas para graficar</h2>
+    <form method="POST">
+        <label for="tipo_grafico">Tipo de Gráfico:</label>
         <select name="tipo_grafico" id="tipo_grafico">
-            <option value="bar">Gráfico de Barras</option>
-            <option value="pie">Gráfico de Pastel</option>
+            <option value="line">Línea</option>
+            <option value="bar">Barra</option>
+            <option value="pie">Pastel</option>
         </select>
-        <button type="submit">Generar Informe</button>
+        <br>
+
+        <label for="nombre_columnas">Selecciona las columnas:</label>
+        <select name="nombre_columnas" id="nombre_columnas" multiple>
+            {% for columna in columnas %}
+                <option value="{{ columna }}">{{ columna }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <input type="submit" value="Generar Gráfico">
     </form>
 
-    <footer>
-        <a href="{{ url_for('logout') }}" class="button">Cerrar Sesión</a>
-    </footer>
+    {% if grafico %}
+        <h3>Gráfico Generado:</h3>
+        <img src="{{ url_for('static', filename='grafico.png') }}" alt="Gráfico">
+        <br>
+        <a href="{{ url_for('download_pdf') }}">Descargar PDF</a>
+    {% endif %}
 </body>
 </html>
