@@ -90,13 +90,17 @@ def report():
             if columna in df.columns:
                 valores = pd.to_numeric(df[columna], errors='coerce').dropna()
                 etiquetas = valores.index
-                plt.pie(valores, labels=etiquetas, autopct='%1.1f%%')
+
+                plt.pie(
+                    valores, 
+                    labels=etiquetas, 
+                    autopct='%1.1f%%', 
+                    startangle=90,  # Inicia desde un ángulo para mejorar la distribución
+                    labeldistance=1.1  # Aumenta la distancia de las etiquetas
+                )
                 plt.title(f'Gráfico de Pastel: {columna}')
             else:
                 return f"Error: La columna {columna} no existe en los datos.", 400
-
-        else:
-            return "Error: Tipo de gráfico no soportado.", 400
 
         #Guardar el gráfico en formato PNG y PDF
         plt.savefig('static/grafico.png')
