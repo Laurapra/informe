@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Informe</title>
+</head>
+<body>
+    <h2>Informe de Datos</h2>
+    <p>Usuario: {{ current_user.id }}</p>
+    <h3>Resumen Estadístico</h3>
+    <div>
+        {% for table in tables %}
+            {{ table|safe }}
+        {% endfor %}
+    </div>
+    <h3>Gráfico</h3>
+    <img src="{{ url_for('static', filename=graph) }}" alt="Gráfico"> <!-- Muestra el gráfico -->
+    <a href="{{ url_for('download') }}">Descargar Informe</a>
+    <br>
+    <a href="{{ url_for('logout') }}">Cerrar Sesión</a>
+</body>
+</html>
