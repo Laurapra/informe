@@ -1,0 +1,75 @@
+/*estilos generales*/
+body{
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #333;
+}
+/*estilos header*/
+h2{
+  text-align: center;
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+/*estilos del form*/
+form{
+  background: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+/*forms labels*/
+form label{
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  color: #333;
+}
+/*inputs fields*/
+form input[type="text"],
+form input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+/*focus inputs styles*/
+form input[type="text"]:focus,
+form input[type="password"]:focus {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #fff, #4facfe);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+form input[type="submit"]:hover {
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+/*responsive style*/
+@media (max-width: 480px) {
+  form {
+    padding: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+  }
+}

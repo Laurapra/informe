@@ -12,7 +12,7 @@ app.secret_key = '1234'  # Cambia esto por una clave secreta más segura en prod
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# Simulación de una base de datos de usuarios
+#Simulación de una base de datos de usuarios
 users = {'usuario1': {'password': '1234'}} 
 
 class User(UserMixin):
